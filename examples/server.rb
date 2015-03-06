@@ -16,10 +16,19 @@ end
 
 class EchoSubscriber < EventServer
   # Passing second parameter as true makes only one instance of this handler handle a request
+
+  listen_to 'foo.*' do
+    if request.body 
+      $stderr.puts '***'
+      respond 'cool'
+    end	  
+  end
+
   listen_to 'echo.*', true do
     if request.body == 'Palmolive'
       respond nil
     else
+      $stderr.puts request.body
       respond "#{request.topic}"
     end
   end
